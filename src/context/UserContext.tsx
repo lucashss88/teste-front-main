@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { API_URL} from '../config/config';
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {API_URL} from '../config/config';
 import {toast} from "react-toastify";
 
 export type UserType = {
@@ -30,6 +30,19 @@ export const UserProvider = ({ children }: any) => {
 
     };
 
+    const getUserByID = async (id: number): Promise<UserType | null> => {
+        try {
+            const res = await fetch(`${API_URL}/users/${id}`);
+            if (!res.ok) {
+                throw new Error('User not found');
+            }
+            return await res.json();
+        } catch (error) {
+            toast.error('Error found user');
+            return null;
+        }
+    }
+
     const updateUser = async (id: number, user: Omit<UserType, 'id'>) => {
         const res = await fetch(`${API_URL}/users/${id}`, {
             method: 'PUT',
@@ -53,7 +66,7 @@ export const UserProvider = ({ children }: any) => {
 
     return (
         <UserContext.Provider
-            value={{users, fetchUsers, createUser, updateUser, deleteUser }}
+            value={{users, fetchUsers, createUser, updateUser, deleteUser, getUserByID }}
         >
             {children}
         </UserContext.Provider>

@@ -4,11 +4,14 @@ import UserForm from "./UserForm";
 import {ToastContainer} from "react-toastify";
 
 const UserList: React.FC = () => {
-    const { users, deleteUser, updateUser } = useUserContext();
+    const { users, deleteUser, updateUser, getUserByID } = useUserContext();
     const [showForm, setShowForm] = useState(false);
     const [editName, setEditName] = useState('');
     const [editEmail, setEditEmail] = useState('');
     const [editingUserID, setEditingUserID] = useState<number | null>(null);
+    const [searchID, setSearchID] = useState('');
+    const [foundUser, setFoundUser] = useState<UserType | null>(null);
+    const [showModal, setShowModal] = useState(false);
 
     const form = () => setShowForm(prev => !prev);
 
@@ -31,12 +34,35 @@ const UserList: React.FC = () => {
       }
     };
 
+    const handleSearch = async () => {
+        const user = await getUserByID(Number(searchID));
+        if (user) {
+            setFoundUser(user);
+            setShowModal(true);
+        }
+    }
+
     return (
       <div className="text-center align-items-center mt-4">
         <ToastContainer />
         <h2>
           Users List
         </h2>
+        <div className="mb-2">
+          <input
+          type="number"
+          value={searchID}
+          onChange={(e) => setSearchID(e.target.value)}
+          placeholder="User ID"
+          className="mr-2 px-1 input-group-sm me-2"
+          />
+          <button
+            onClick={handleSearch}
+            className="bg-light btn"
+          >
+            Search User
+          </button>
+        </div>
         <table className="w-100 collapsed">
           <thead>
             <tr>
@@ -71,13 +97,13 @@ const UserList: React.FC = () => {
                     <td>
                       <button
                         onClick={saveUpdate}
-                        className="bg-light text-black p-1 px-2 border-black rounded-2 "
+                        className="btn bg-light text-black p-1 px-2 border-black rounded-2 "
                       >
                         Save
                       </button>
                       <button
                         onClick={cancelUpdate}
-                        className="bg-light text-black p-1 px-2 m-lg-2 border-black rounded-2"
+                        className="btn bg-light text-black p-1 px-2 m-lg-2 border-black rounded-2"
                       >
                         Cancel
                       </button>
@@ -90,13 +116,13 @@ const UserList: React.FC = () => {
                     <td>
                       <button
                         onClick={() => editUpdate(user)}
-                        className="bg-light text-black p-1 px-2 border-black rounded-2"
+                        className="btn bg-light text-black p-1 px-2 border-black rounded-2"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => deleteUser(user.id)}
-                        className="bg-danger text-white m-lg-2 p-1 px-2 border-black rounded-2"
+                        className="btn bg-danger text-white m-lg-2 p-1 px-2 border-black rounded-2"
                       >
                         Delete
                       </button>
@@ -109,11 +135,31 @@ const UserList: React.FC = () => {
         </table>
         <button
           onClick={form}
-          className="mb-1 p-2 mt-4 bg-light text-black rounded-2"
+          className="btn mb-1 p-2 mt-4 bg-light text-black rounded-2"
         >
             {showForm ? 'Close form' : 'Add User'}
         </button>
           {showForm && <UserForm /> }
+          {showModal && foundUser && (
+            <div
+              className="position-fixed fixed-top bg-opacity-75 w-25 d-block ms-4 mt-4"
+            >
+              <div
+                className="bg-light p-2 rounded-1"
+              >
+                <h3>Founded User</h3>
+                <p><strong>ID: </strong>{foundUser.id}</p>
+                <p><strong>Name: </strong>{foundUser.name}</p>
+                <p><strong>Email: </strong>{foundUser.email}</p>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="mt-1 bg-light text-black"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
       </div>
     );
 };
