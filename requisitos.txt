@@ -1,0 +1,31 @@
+**Desafio:**
+
+Você deve fazer o frontend para seguir as boas práticas de TypeScript, Context API e uso de variáveis de ambiente para os endpoints.
+
+---
+
+### Requisitos:
+
+1. **Uso do Context API**
+   - Criar um `UserContext.tsx` para gerenciar os usuários no frontend.
+   - Disponibilizar métodos para buscar, criar, atualizar e deletar usuários dentro do contexto.
+   - Utilizar esse contexto nos componentes React do frontend.
+
+2. **Armazenamento de Endpoints no `.env`**
+   - Mover os endpoints para o arquivo `.env`.
+   - Garantir que o frontend utilize essas variáveis dinamicamente.
+   - Criar um arquivo `config.ts` para centralizar o acesso às variáveis de ambiente.
+
+3. **Conversão para TypeScript**
+   - Renomear os arquivos do frontend para `.tsx`.
+   - Tipar corretamente todas as funções e variáveis.
+   - Criar interfaces para os dados manipulados.
+
+---
+
+### Critérios de Aceitação:
+- O frontend deve consumir os dados via `useContext`.
+- Todos os endpoints devem ser configuráveis via `.env`.
+- Código limpo, bem estruturado e seguindo boas práticas.
+
+Boa sorte! 🚀
