@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import { useUserContext, UserType } from "../context/UserContext";
 import UserForm from "./UserForm";
 import {ToastContainer} from "react-toastify";
+import UserModalSearch from "./UserModalSearch";
 
 const UserList: React.FC = () => {
     const { users, deleteUser, updateUser, getUserByID } = useUserContext();
@@ -141,24 +142,7 @@ const UserList: React.FC = () => {
         </button>
           {showForm && <UserForm /> }
           {showModal && foundUser && (
-            <div
-              className="position-fixed fixed-top bg-opacity-75 w-25 d-block ms-4 mt-4"
-            >
-              <div
-                className="bg-light p-2 rounded-1"
-              >
-                <h3>Founded User</h3>
-                <p><strong>ID: </strong>{foundUser.id}</p>
-                <p><strong>Name: </strong>{foundUser.name}</p>
-                <p><strong>Email: </strong>{foundUser.email}</p>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="mt-1 bg-light text-black"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
+            <UserModalSearch user={foundUser} onclose={() => setShowModal(false)} />
           )}
       </div>
     );
