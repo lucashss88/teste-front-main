@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {API_URL} from '../config/config';
+import {USERS_BY_ID_URL, USERS_DELETE_URL, USERS_GET_URL, USERS_POST_URL, USERS_UPDATE_URL} from '../config/config';
 import {toast} from "react-toastify";
 
 export type UserType = {
@@ -14,13 +14,13 @@ export const UserProvider = ({ children }: any) => {
     const [users, setUsers] = useState<UserType[]>([]);
 
     const fetchUsers = async () => {
-        const res = await fetch(`${API_URL}/users`);
+        const res = await fetch(USERS_GET_URL);
         const data = await res.json();
         setUsers(data);
     };
 
     const createUser = async (user: Omit<UserType, 'id'>) => {
-        const res = await fetch(`${API_URL}/users`, {
+        const res = await fetch(USERS_POST_URL, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(user),
@@ -32,7 +32,8 @@ export const UserProvider = ({ children }: any) => {
 
     const getUserByID = async (id: number): Promise<UserType | null> => {
         try {
-            const res = await fetch(`${API_URL}/users/${id}`);
+            const url = USERS_BY_ID_URL.replace(':id', id.toString());
+            const res = await fetch(url);
             if (!res.ok) {
                 throw new Error('User not found');
             }
@@ -44,7 +45,9 @@ export const UserProvider = ({ children }: any) => {
     }
 
     const updateUser = async (id: number, user: Omit<UserType, 'id'>) => {
-        const res = await fetch(`${API_URL}/users/${id}`, {
+        const url = USERS_UPDATE_URL.replace(':id', id.toString());
+
+        const res = await fetch(url, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(user),
@@ -55,7 +58,9 @@ export const UserProvider = ({ children }: any) => {
     };
 
     const deleteUser = async (id: number) => {
-        await fetch(`${API_URL}/users/${id}`, {method: 'DELETE'});
+        const url = USERS_DELETE_URL.replace(':id', id.toString());
+
+        await fetch(url, {method: 'DELETE'});
         setUsers((prev) => prev.filter((u) => u.id !== id));
         toast.success('User deleted successfully');
     };
