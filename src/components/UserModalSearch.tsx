@@ -2,8 +2,8 @@ import React from "react";
 import { UserType } from "../context/UserContext";
 
 type UserModalProps = {
-  user: UserType;
-  onclose: () => void;
+    user: UserType;
+    onclose: () => void;
 };
 
 const UserModalSearch: React.FC<UserModalProps> = ({ user, onclose }) => {
